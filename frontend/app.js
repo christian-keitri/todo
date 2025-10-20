@@ -9,26 +9,37 @@ async function fetchTodos() {
   todos.forEach(todo => {
     const item = document.createElement('li');
 
-    const textSpan = document.createElement('span');
-    textSpan.textContent = `${todo.text} ${todo.done ? '✅' : ''}`;
-    textSpan.style.marginRight = '10px';
-    textSpan.onclick = () => toggleTodo(todo.id, !todo.done);
+    // ✅ Checkbox
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.checked = todo.done;
+    checkbox.style.marginRight = '10px';
+    checkbox.onchange = () => toggleTodo(todo.id, checkbox.checked);
 
+    // Task text
+    const textSpan = document.createElement('span');
+    textSpan.textContent = todo.text;
+    textSpan.style.marginRight = '10px';
+
+    // ✏️ Edit button
     const editBtn = document.createElement('button');
     editBtn.textContent = '✏️';
     editBtn.style.marginRight = '5px';
     editBtn.onclick = () => editTodo(todo.id, todo.text);
 
+    // 🗑️ Delete button
     const deleteBtn = document.createElement('button');
     deleteBtn.textContent = '🗑️';
     deleteBtn.onclick = () => deleteTodo(todo.id);
 
+    item.appendChild(checkbox);
     item.appendChild(textSpan);
     item.appendChild(editBtn);
     item.appendChild(deleteBtn);
     list.appendChild(item);
   });
 }
+
 
 async function addTodo() {
   const input = document.getElementById('todo-input');
