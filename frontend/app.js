@@ -58,7 +58,7 @@ async function addTodo() {
 
 async function toggleTodo(id, done) {
   await fetch(`${API_URL}/${id}`, {
-    method: 'PUT',
+    method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ done })
   });
@@ -71,7 +71,7 @@ async function editTodo(id, oldText) {
   if (!newText || newText.trim() === '') return;
 
   await fetch(`${API_URL}/${id}`, {
-    method: 'PUT',
+    method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ text: newText.trim() })
   });

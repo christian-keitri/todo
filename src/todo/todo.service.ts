@@ -1,36 +1,29 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { Todo } from './todo.entity';
 
 @Injectable()
 export class TodoService {
-  private todos: Todo[] = [];
+  constructor(
+    @InjectRepository(Todo)
+    private todoRepo: Repository<Todo>,
+  ) { }
 
-  findAll(): Todo[] {
-    return this.todos;
+  findAll(): Promise<Todo[]> {
+    return this.todoRepo.find();
   }
 
-  create(text: string): Todo {
-    const todo = { id: Date.now(), text, done: false };
-    this.todos.push(todo);
-    return todo;
+  create(text: string): Promise<Todo> {
+    const todo = this.todoRepo.create({ text });
+    return this.todoRepo.save(todo);
   }
 
-  update(id: number, body: { done?: boolean; text?: string }): boolean {
-    const todo = this.todos.find(t => t.id === id);
-    if (todo) {
-      if (body.done !== undefined) todo.done = body.done;
-      if (body.text !== undefined) todo.text = body.text;
-      return true;
-    }
-    return false;
+  update(id: number, body: Partial<Todo>): Promise<void> {
+    return this.todoRepo.update(id, body).then(() => { });
   }
 
-  delete(id: number): boolean {
-    const index = this.todos.findIndex(t => t.id === id);
-    if (index > -1) {
-      this.todos.splice(index, 1);
-      return true;
-    }
-    return false;
+  delete(id: number): Promise<void> {
+    return this.todoRepo.delete(id).then(() => { });
   }
 }
