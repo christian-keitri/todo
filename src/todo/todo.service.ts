@@ -15,10 +15,11 @@ export class TodoService {
     return todo;
   }
 
-  update(id: number, done: boolean): boolean {
+  update(id: number, body: { done?: boolean; text?: string }): boolean {
     const todo = this.todos.find(t => t.id === id);
     if (todo) {
-      todo.done = done;
+      if (body.done !== undefined) todo.done = body.done;
+      if (body.text !== undefined) todo.text = body.text;
       return true;
     }
     return false;

@@ -16,8 +16,11 @@ export class TodoController {
   }
 
   @Put(':id')
-  updateTodo(@Param('id') id: string, @Body('done') done: boolean) {
-    return this.todoService.update(+id, done);
+  updateTodo(
+    @Param('id') id: string,
+    @Body() body: { done?: boolean; text?: string }
+  ) {
+    return this.todoService.update(+id, body);
   }
 
   @Delete(':id')
